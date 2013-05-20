@@ -6,12 +6,13 @@ module.exports = function(app){
         Post.get(null, function(err, posts){
             if(err){
                 posts = [];
-            } 
+            }
             res.render('index',{
-                title:'主页',
+                title: '主页',
                 user: req.session.user,
-                posts:posts,
-                success:req.flash('success').toString()
+                posts: posts,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
             });
         });
     });
@@ -36,7 +37,7 @@ module.exports = function(app){
         var password = md5.update(req.body.password).digest('base64');
         var newUser = new User({
             name: req.body.username,
-            password: password,
+            password: password
         });
         User.get(newUser.name, function(err, user){
             if(user){
@@ -117,6 +118,25 @@ module.exports = function(app){
             res.redirect('/');
         });
     });
+
+    //单页面
+    app.get('/single/:id', function(req, res) {
+        var query = 'id = ' +  req.params.id;
+        Post.get(query, function(err, posts) {
+            if(err) {
+                post = {};
+            }
+            post = posts[0];
+            res.render('single', {
+                multiPath: 1,
+                title: post.title,
+                user: req.session.user,
+                post: post,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
+            })
+        });
+    })
 };
 
 function checkLogin(req, res, next){

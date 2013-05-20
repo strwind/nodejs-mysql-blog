@@ -12,6 +12,9 @@ var express = require('express')
   , flash = require('connect-flash');
 
 var app = express();
+//记录日志
+var fs = require('fs');
+var accessLogfile = fs.createWriteStream('access.log', {flags: 'a'});
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -19,7 +22,9 @@ app.configure(function(){
   app.set('view engine', 'ejs');
   app.use(flash());
   app.use(express.favicon());
-  app.use(express.logger('dev'));
+  app.use(express.logger({
+    stream: accessLogfile
+  }));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(express.cookieParser());

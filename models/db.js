@@ -9,13 +9,3 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 module.exports = connection;
-
-/*
-connection.query('SELECT * FROM users', function(err, rows, fields) {
-  if (err) throw err;
-
-  console.log('The solution is: ', rows);
-});
-
-connection.end();
-*/

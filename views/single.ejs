@@ -1,10 +1,19 @@
 <%- include header %>
 
     <p>
-    	<h2><a href="/single/<%= post.id %>"><%= post.title %></a></h2>
-    	<time><%= post.time %> by:<a href="#"><%= post.user %></a></time>
+    	<h2>
+    		<a href="/single/<%= post.id %>">
+    			<%= post.title %>
+			</a>
+		</h2>
+    	<time>
+    		<%= post.time %> by:
+    		<a href="/author/<%= post.user %>">
+    			<%= post.user %>
+    		</a>
+		</time>
 	</p>
     <p><%- post.post %></p>
     <a href="/edit/<%= post.id %>">编辑</a>
-    <a href="/delete/<%= post.id %>">删除</a>
+    <a href="/remove/<%= post.id %>">删除</a>
 <%- include footer %>

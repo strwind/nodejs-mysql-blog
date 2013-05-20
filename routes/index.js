@@ -2,6 +2,8 @@ var crypto = require('crypto'),
     User = require('../models/user.js'),
     Post = require('../models/post.js');
 module.exports = function(app){	
+
+    //主页面
 　　app.get('/', function(req,res){
         Post.get(null, function(err, posts){
             if(err){
@@ -17,6 +19,7 @@ module.exports = function(app){
         });
     });
 
+    //注册页面
     app.get('/reg', checkNotLogin);
     app.get('/reg', function(req,res){
         res.render('reg',{
@@ -59,6 +62,7 @@ module.exports = function(app){
         });
     });
 
+    //登录
     app.get('/login', checkNotLogin);
     app.get('/login', function(req, res){
         res.render('login',{
@@ -88,6 +92,7 @@ module.exports = function(app){
         });
     });
 
+    //退出登录
     app.get('/logout', checkLogin);
     app.get('/logout', function(req, res){
         req.session.user = null;
@@ -95,6 +100,7 @@ module.exports = function(app){
         res.redirect('/');
 	});
 
+    //发表文章页面
 	app.get('/post', checkLogin);
     app.get('/post', function(req, res){
         res.render('post',{
@@ -104,7 +110,7 @@ module.exports = function(app){
             error:req.flash('error').toString()
         }); 
     });
-    
+
 	app.post('/post', checkLogin);
     app.post('/post', function(req, res){
         var currentUser = req.session.user,
@@ -124,24 +130,96 @@ module.exports = function(app){
         var query = 'id = ' +  req.params.id;
         Post.get(query, function(err, posts) {
             if(err) {
-                post = {};
-            }
-            post = posts[0];
-            res.render('single', {
+                var post = {};
+            } else {
+                var post = posts[0];
+            }         
+           res.render('single', {
                 multiPath: 1,
-                title: post.title,
+                title: '文章详细内容',
                 user: req.session.user,
                 post: post,
                 success: req.flash('success').toString(),
                 error: req.flash('error').toString()
             })
         });
-    })
+    });
+
+    //作者页面
+    app.get('/author/:user', function(req, res) {
+        var query = 'user = ' + req.params.user;
+        Post.get(query, function(err, posts) {
+            if(err) {
+                posts = [];
+            }            
+            res.render('index', {
+                multiPath : 1,
+                title: '作者文章页',
+                user: req.session.user,
+                posts: posts,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
+            });
+
+        });
+
+    });
+
+    //删除页面
+    app.get('/remove/:id', function(req, res) {
+        var query = 'id = ' + req.params.id;
+        Post.remove(query, function(err) {
+            if(err){
+                req.flash('error', err); 
+                return res.redirect('/');
+            }
+            req.flash('success', '删除成功!');
+            res.redirect('/');
+        });
+    });
+
+    //编辑页面
+    app.get('/edit/:id', function(req, res) {
+        var query = 'id = ' + req.params.id;
+        Post.get(query, function(err, posts) {
+            if(err) {
+                var post = {};
+            } else {
+                var post = posts[0];
+            }
+            res.render('edit',{
+                multiPath: 1,
+                title: '编辑页面',
+                user: req.session.user,
+                post: post,
+                success: req.flash('success').toString(),
+                error: req.flash('error').toString()
+            });
+        });
+    });
+
+    app.post('/edit/:id', function(req, res) {
+        var options = {
+            id: req.body.id,
+            title: req.body.title,
+            post: req.body.post
+        };
+        Post.update(options, function(err) {
+            if(err){
+                req.flash('error', err.toString());
+                return res.redirect('/');
+            }
+            req.flash('success', '编辑成功!');
+            res.redirect('/single/'+ options.id);
+        });
+    });
+
+
 };
 
 function checkLogin(req, res, next){
     if(!req.session.user){
-        req.flash('error','未登录'); 
+        req.flash('error','未登录');
         return res.redirect('/login');
     }
     next();
@@ -150,7 +228,7 @@ function checkLogin(req, res, next){
 
 function checkNotLogin(req,res,next){
     if(req.session.user){
-        req.flash('error','已登录'); 
+        req.flash('error','已登录');
         return res.redirect('/');
     }
     next();

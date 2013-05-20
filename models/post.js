@@ -11,6 +11,8 @@ function Post(username, title, post, time) {
         this.time = new Date();
     }
 }
+
+//增
 Post.prototype.save = function save(callback) {
     var post = {
         user: this.user,
@@ -25,8 +27,10 @@ Post.prototype.save = function save(callback) {
         callback(err, result);
     });
 };
+
 //几个路由共用，所以为静态方法
-Post.get = function get(query, callback) {
+//查
+Post.get = function (query, callback) {
     var sql = 'SELECT * FROM posts';
     if(query) {
         sql = 'SELECT * FROM posts WHERE ' + query;
@@ -44,6 +48,30 @@ Post.get = function get(query, callback) {
          rows.reverse();//倒序排列
          callback(null, rows);
     });
+};
+
+//删
+Post.remove = function(query, callback) {
+    var sql = 'DELETE FROM  `posts` WHERE ' + query;
+    mysql.query(sql, function(err, result){
+        if(err) {
+            callback(err);
+        }
+        callback(err, result);
+    });
+};
+
+//改
+Post.update = function (options, callback) {
+    var sql = 'UPDATE posts SET title = "'+ options.title + '",' +
+            'post = "' + options.post + '"' +
+            'WHERE id = ' + options.id;
+    mysql.query(sql, options, function(err, result) {
+        if(err) {
+            callback(err);
+        }
+        callback(err, result);
+    })
 };
 
 module.exports = Post;

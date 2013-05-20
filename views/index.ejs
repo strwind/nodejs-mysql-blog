@@ -1,6 +1,19 @@
 <%- include header %>
 <% locals.posts.forEach(function(post, index){ %>
-    <p><h2><a href="/single/<%= post.id %>"><%= post.title %></a></h2><time><%= post.time %> by:<a href="#"><%= post.user %></a></time></p>
-    <p><%- post.post %></p>
+	<div class="item">
+		<h2>
+			<a href="/single/<%= post.id %>">
+				<%= post.title %>
+			</a>
+		</h2>
+		<time>
+			<%= post.time %> by:
+			<a href="/author/<%= post.user %>">
+				<%= post.user %>
+			</a>
+		</time>
+	    <p><%- post.post %></p>
+	    <hr/>
+    </div>
 <% }) %>
 <%- include footer %>

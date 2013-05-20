@@ -11,3 +11,6 @@ article a{text-decoration:none;color:#dd0000;}
 article a:hover{color:#333333;text-decoration:underline;}
 article h2{display: inline;}
 article time{font-size:14px;float:right;}
+.item{margin-bottom: 20px;}
+hr{opacity: 0.2;}
+textarea{ text-align: left;}

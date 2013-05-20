@@ -1,0 +1,12 @@
+<%- include header %>
+    <form method='post'>
+        <input type="hidden" name="id" value="<%= post.id %>"/>
+        标题：
+        <input type='text' name="title" value="<%= post.title %>"/>
+        <br/>
+        内容：
+        <textarea name="post" cols="25" rows="8"><%= post.post %></textarea>
+        <br/>
+        <input type='submit' value="提交"/>
+    </form>
+<%- include footer %>

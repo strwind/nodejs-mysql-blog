@@ -13,7 +13,7 @@ function Post(username, title, post, time) {
 }
 
 //增
-Post.prototype.save = function save(callback) {
+Post.prototype.save = function (callback) {
     var post = {
         user: this.user,
         title:this.title,
@@ -71,7 +71,7 @@ Post.update = function (options, callback) {
             callback(err);
         }
         callback(err, result);
-    })
+    });
 };
 
 module.exports = Post;

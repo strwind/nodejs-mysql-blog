@@ -2,9 +2,8 @@ var crypto = require('crypto'),
     User = require('../models/user.js'),
     Post = require('../models/post.js');
 module.exports = function(app){	
-
     //主页面
-　　app.get('/', function(req,res){
+    app.get('/', function(req,res){
         Post.get(null, function(err, posts){
             if(err){
                 posts = [];
@@ -141,7 +140,7 @@ module.exports = function(app){
                 post: post,
                 success: req.flash('success').toString(),
                 error: req.flash('error').toString()
-            })
+            });
         });
     });
 

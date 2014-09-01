@@ -5,7 +5,7 @@ function User(user){
     this.password = user.password;
 };
 
-User.prototype.save = function save(callback) {
+User.prototype.save = function (callback) {
     var post  = {
         name:this.name,
         password: this.password
@@ -19,7 +19,7 @@ User.prototype.save = function save(callback) {
 };
 
 //几个路由共用，所以为静态方法
-User.get = function get(username, callback){
+User.get = function (username, callback) {
     var query = username;
     var sql = 'SELECT * FROM users WHERE `NAME`= '+ query;
     
